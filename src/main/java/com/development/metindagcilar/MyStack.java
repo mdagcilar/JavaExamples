@@ -1,4 +1,4 @@
-package com.development.metindagcilar.stack;
+package com.development.metindagcilar;
 
 import java.util.EmptyStackException;
 

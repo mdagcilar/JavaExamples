@@ -1,4 +1,4 @@
-package com.development.metindagcilar.stack;
+package com.development.metindagcilar;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
