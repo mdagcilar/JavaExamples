@@ -1,4 +1,4 @@
-package com.development.metindagcilar;
+package com.development.metindagcilar.smallest.difference;
 
 import java.util.Arrays;
 
