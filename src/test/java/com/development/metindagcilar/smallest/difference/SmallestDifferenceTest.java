@@ -1,5 +1,6 @@
-package com.development.metindagcilar;
+package com.development.metindagcilar.smallest.difference;
 
+import com.development.metindagcilar.smallest.difference.SmallestDifference;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
