@@ -1,5 +1,7 @@
 package com.development.metindagcilar.java8.predicate;
 
+import com.development.metindagcilar.java8.Person;
+
 import java.util.function.BiPredicate;
 
 public class BiPredicateTest {
