@@ -1,19 +1,12 @@
 package com.development.metindagcilar.smallest.difference;
 
-import com.development.metindagcilar.smallest.difference.SmallestDifference;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class SmallestDifferenceTest {
 
-    SmallestDifference smallestDifference;
-
-    @BeforeEach
-    private void setup() {
-        smallestDifference = new SmallestDifference();
-    }
+    SmallestDifference smallestDifference = new SmallestDifference();
 
     @Test
     void findSmallestDifference() {
