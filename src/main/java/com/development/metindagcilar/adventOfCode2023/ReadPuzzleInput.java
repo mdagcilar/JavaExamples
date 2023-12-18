@@ -1,4 +1,4 @@
-package com.development.metindagcilar.adventOfCode2021;
+package com.development.metindagcilar.adventOfCode2023;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +36,7 @@ public class ReadPuzzleInput {
     private List<Integer> getLinesAsIntegers(String inputPath) {
         List<Integer> lines = new ArrayList<>();
         try {
-            List<String> input = Files.readAllLines(Paths.get("src/main/resources/adventofcode2021/day" + adventDay + "/" + inputPath));
+            List<String> input = Files.readAllLines(Paths.get("src/main/resources/adventofcode2023/day" + adventDay + "/" + inputPath));
             return input.stream()
                     .map(Integer::parseInt)
                     .toList();
