@@ -15,6 +15,7 @@ public class ReadPuzzleInput {
 
     private final int adventDay;
     private static final String INPUT_SAMPLE_TXT = "/sample.txt";
+    private static final String INPUT_SAMPLE_2_TXT = "/sample2.txt";
     private static final String INPUT_ONE_TXT = "/one.txt";
 
     public List<Integer> getSampleAsIntegers() {
@@ -31,6 +32,10 @@ public class ReadPuzzleInput {
 
     public List<String> getInputOneAsLines() {
         return getLines(INPUT_ONE_TXT);
+    }
+
+    public List<String> getSampleTwoAsLines() {
+        return getLines(INPUT_SAMPLE_2_TXT);
     }
 
     private List<Integer> getLinesAsIntegers(String inputPath) {
