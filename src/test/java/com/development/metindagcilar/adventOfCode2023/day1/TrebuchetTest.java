@@ -41,5 +41,4 @@ class TrebuchetTest {
         assertThat(sumOfCalibrationValues).isEqualTo(55652);
     }
 
-
 }

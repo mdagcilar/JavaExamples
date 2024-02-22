@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 public class Trebuchet {
 
-    Map<String, String> numbersMap = Map.of(
+    private final Map<String, String> numbersMap = Map.of(
             "one", "1",
             "two", "2",
             "three", "3",
@@ -24,10 +24,10 @@ public class Trebuchet {
                 .map(this::replaceWordsAsNumbers)
                 .collect(Collectors.toList());
 
-        List<String> digits = replaceAllNonDigits(convertWordsToDigits);
+        List<String> onlyDigits = replaceAllNonDigits(convertWordsToDigits);
 
-        List<String> collect = getReducedDigits(digits);
-        return sumOfStrings(collect);
+        List<String> reducedDigits = getReducedDigits(onlyDigits);
+        return calculateSum(reducedDigits);
     }
 
     // e.g. xtwone3four
@@ -47,7 +47,7 @@ public class Trebuchet {
                     result.append(numbersMap.get(number));
                     if (i + number.length() >= calibration.length())
                         break;
-                    i = i + number.length() -1;
+                    i = i + number.length() - 1;
                     j = -1;
                 }
             }
@@ -79,7 +79,7 @@ public class Trebuchet {
                 .collect(Collectors.toList());
     }
 
-    private int sumOfStrings(List<String> reducedDigits) {
+    private int calculateSum(List<String> reducedDigits) {
         return reducedDigits.stream()
                 .mapToInt(Integer::valueOf)
                 .sum();
