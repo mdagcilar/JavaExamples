@@ -20,7 +20,7 @@ class OverlappingIntervalsTest {
         List<Interval> B = new ArrayList<>();
         B.add(new Interval(LocalDate.of(2024, 1, 3), LocalDate.of(2024, 1, 12)));
 
-        List<Interval> mergedList = OverlappingIntervals.mergeIntervals(A, B);
+        List<Interval> mergedList = OverlappingIntervals.mergeIntervals2(A, B);
 
         for (Interval interval : mergedList) {
             System.out.println("{startDate = " + interval.startDate + ", endDate = " + interval.endDate + "}");
@@ -41,7 +41,7 @@ class OverlappingIntervalsTest {
         List<Interval> B = new ArrayList<>();
         B.add(new Interval(LocalDate.of(2024, 1, 3), LocalDate.of(2024, 1, 12)));
 
-        List<Interval> mergedList = OverlappingIntervals.mergeIntervals(A, B);
+        List<Interval> mergedList = OverlappingIntervals.mergeIntervals2(A, B);
 
         for (Interval interval : mergedList) {
             System.out.println("{startDate = " + interval.startDate + ", endDate = " + interval.endDate + "}");
@@ -60,7 +60,7 @@ class OverlappingIntervalsTest {
         List<Interval> B = new ArrayList<>();
         B.add(new Interval(LocalDate.of(2024, 1, 3), LocalDate.of(2024, 1, 12)));
 
-        List<Interval> mergedList = OverlappingIntervals.mergeIntervals(A, B);
+        List<Interval> mergedList = OverlappingIntervals.mergeIntervals2(A, B);
 
         for (Interval interval : mergedList) {
             System.out.println("{startDate = " + interval.startDate + ", endDate = " + interval.endDate + "}");

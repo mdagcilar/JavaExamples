@@ -4,14 +4,15 @@ import lombok.EqualsAndHashCode;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class OverlappingIntervals {
 
     public static List<Interval> mergeIntervals(List<Interval> A, List<Interval> B) {
         // Sort both lists based on the start date
-        A.sort((a, b) -> a.startDate.compareTo(b.startDate));
-        B.sort((a, b) -> a.startDate.compareTo(b.startDate));
+        A.sort(Comparator.comparing(a -> a.startDate));
+        B.sort(Comparator.comparing(a -> a.startDate));
 
         List<Interval> mergedList = new ArrayList<>();
         int i = 0, j = 0;
@@ -23,12 +24,12 @@ public class OverlappingIntervals {
             // could probs get away with adding all of A immediately?
 
             // Check if intervals overlap
-            if (a.startDate.compareTo(b.endDate) <= 0 && b.startDate.compareTo(a.endDate) <= 0) {
+            if (!a.startDate.isAfter(b.endDate) && !b.startDate.isAfter(a.endDate)) {
                 // Add interval from list A to mergedList
                 mergedList.add(a);
 
                 // Create a new interval to cover the gap in list B
-                if (isBefore(a, b) && A.size() > (i + 1) && isAfter(b, A.get(i + 1))) {
+                if (a.endDate.isBefore(b.endDate) && A.size() > (i + 1) && b.endDate.isAfter(A.get(i + 1).startDate)) {
                     Interval newInterval = new Interval(a.endDate.plusDays(1), A.get(i + 1).startDate.minusDays(1));
                     mergedList.add(newInterval);
                 } else {
@@ -59,12 +60,47 @@ public class OverlappingIntervals {
         return mergedList;
     }
 
-    private static boolean isAfter(Interval b, Interval a) {
-        return b.endDate.compareTo(a.startDate) > 0;
-    }
+    public static List<Interval> mergeIntervals2(List<Interval> A, List<Interval> B) {
+        // Sort both lists based on the start date
+        A.sort(Comparator.comparing(a -> a.startDate));
+        B.sort(Comparator.comparing(a -> a.startDate));
 
-    private static boolean isBefore(Interval a, Interval b) {
-        return a.endDate.compareTo(b.endDate) < 0;
+        List<Interval> mergedList = new ArrayList<>(A); // Start with all of A's elements
+        int i = 0, m = 0;
+
+        while (i < B.size()) {
+            Interval b = B.get(i);
+
+            if (b.startDate.isBefore(mergedList.get(m).startDate)) {
+                LocalDate endDate = b.endDate.isBefore(mergedList.get(m).startDate) ? b.endDate : mergedList.get(m).startDate.minusDays(1);
+                Interval newInterval = new Interval(b.startDate, endDate);
+                mergedList.add(newInterval);
+                m++;
+            } else if (b.endDate.isAfter(mergedList.get(m).endDate)) {
+                if (mergedList.size() > (m + 1) && b.endDate.isAfter(mergedList.get(i + 1).startDate)) {
+                    Interval newInterval = new Interval(mergedList.get(m).endDate.plusDays(1), mergedList.get(i + 1).startDate.minusDays(1));
+                    mergedList.add(newInterval);
+                    i++;
+                } else {
+                    Interval newInterval = new Interval(mergedList.get(m).endDate.plusDays(1), b.endDate);
+                    mergedList.add(newInterval);
+                    i++;
+                }
+            } else {
+//                mergedList.get(m).startDate = mergedList.get(m).startDate.isBefore(b.startDate) ? mergedList.get(m).startDate : b.startDate;
+//                mergedList.get(m).endDate = mergedList.get(m).endDate.isAfter(b.endDate) ? mergedList.get(m).endDate : b.endDate;
+                i++;
+            }
+        }
+
+        // Add remaining intervals from list B to mergedList
+        while (i < B.size()) {
+            mergedList.add(B.get(i));
+            i++;
+        }
+
+        mergedList.sort(Comparator.comparing(a -> a.startDate));
+        return mergedList;
     }
 
     @EqualsAndHashCode
