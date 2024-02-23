@@ -81,10 +81,12 @@ public class OverlappingIntervals {
                     Interval newInterval = new Interval(mergedList.get(m).endDate.plusDays(1), mergedList.get(i + 1).startDate.minusDays(1));
                     mergedList.add(newInterval);
                     i++;
+                    m++;
                 } else {
                     Interval newInterval = new Interval(mergedList.get(m).endDate.plusDays(1), b.endDate);
                     mergedList.add(newInterval);
                     i++;
+                    m++;
                 }
             } else {
                 i++;
