@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class OverlappingIntervalsTest {
 
     @Test
-    void tempRegimeOverrideThatOverlapsTwoSkuAndSiteOverridesTest(){
+    void tempRegimeOverrideThatOverlapsTwoSkuAndSiteOverridesTestShouldReduceTheTempRegimeOverrideWindow(){
         List<Interval> A = new ArrayList<>();
         A.add(new Interval(LocalDate.of(2024, 1, 1), LocalDate.of(2024, 1, 5)));
         A.add(new Interval(LocalDate.of(2024, 1, 10), LocalDate.of(2024, 1, 15)));
@@ -34,7 +34,7 @@ class OverlappingIntervalsTest {
 
 
     @Test
-    void tempRegimeOverrideThatOverlapsSecondHalfOfSkuAndSiteOverrideTest(){
+    void tempRegimeOverrideThatOverlapsSecondHalfOfSkuAndSiteOverrideTestShouldSplitSecondHalfOfTempRegimeOverride(){
         List<Interval> A = new ArrayList<>();
         A.add(new Interval(LocalDate.of(2024, 1, 1), LocalDate.of(2024, 1, 5)));
 
@@ -68,6 +68,27 @@ class OverlappingIntervalsTest {
 
         assertThat(mergedList.size()).isEqualTo(1);
         assertThat(mergedList.get(0)).isEqualTo(new Interval(LocalDate.of(2024, 1, 1), LocalDate.of(2024, 1, 15)));
+    }
+
+
+    @Test
+    void pyramidOfPrecedenceTest(){
+        List<Interval> A = new ArrayList<>();
+        A.add(new Interval(LocalDate.of(2024, 1, 5), LocalDate.of(2024, 1, 10)));
+
+        List<Interval> B = new ArrayList<>();
+        B.add(new Interval(LocalDate.of(2024, 1, 1), LocalDate.of(2024, 1, 15)));
+
+        List<Interval> mergedList = OverlappingIntervals.mergeIntervals2(A, B);
+
+        for (Interval interval : mergedList) {
+            System.out.println("{startDate = " + interval.startDate + ", endDate = " + interval.endDate + "}");
+        }
+
+        assertThat(mergedList.size()).isEqualTo(3);
+        assertThat(mergedList.get(0)).isEqualTo(new Interval(LocalDate.of(2024, 1, 1), LocalDate.of(2024, 1, 4)));
+        assertThat(mergedList.get(1)).isEqualTo(new Interval(LocalDate.of(2024, 1, 5), LocalDate.of(2024, 1, 10)));
+        assertThat(mergedList.get(2)).isEqualTo(new Interval(LocalDate.of(2024, 1, 11), LocalDate.of(2024, 1, 15)));
     }
 
 
