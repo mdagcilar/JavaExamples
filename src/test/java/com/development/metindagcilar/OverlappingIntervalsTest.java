@@ -109,7 +109,7 @@ class OverlappingIntervalsTest {
     }
 
     @Test
-    void tempRegimeOverrideThatOverlapsFirstHalfOfSkuAndSiteOverrideWithMoreSkuSiteOverrides(){
+    void tempRegimeOverrideThatOverlapsFirstHalfOfSkuAndSiteOverrideWithSucceedingSkuSiteOverridesWithSucceedingSkuSiteOverridesShouldSplit(){
         List<Interval> A = new ArrayList<>();
         A.add(new Interval(LocalDate.of(2024, 1, 1), LocalDate.of(2024, 1, 5)));
         A.add(new Interval(LocalDate.of(2024, 1, 10), LocalDate.of(2024, 1, 15)));
@@ -129,15 +129,57 @@ class OverlappingIntervalsTest {
         assertThat(mergedList.get(2)).isEqualTo(new Interval(LocalDate.of(2024, 1, 10), LocalDate.of(2024, 1, 15)));
     }
 
-
     @Test
-    void tempRegimeOverrideThatOverlapsSecondHalfOfTheSecondSkuAndSiteOverrideShouldSplit(){
+    void tempRegimeOverrideThatOverlapsFirstHalfOfTheSecondSkuAndSiteOverridShouldSplit(){
         List<Interval> A = new ArrayList<>();
         A.add(new Interval(LocalDate.of(2024, 1, 1), LocalDate.of(2024, 1, 5)));
         A.add(new Interval(LocalDate.of(2024, 1, 10), LocalDate.of(2024, 1, 15)));
 
         List<Interval> B = new ArrayList<>();
         B.add(new Interval(LocalDate.of(2024, 1, 7), LocalDate.of(2024, 1, 12)));
+
+        List<Interval> mergedList = OverlappingIntervals.mergeIntervals2(A, B);
+
+        for (Interval interval : mergedList) {
+            System.out.println("{startDate = " + interval.startDate + ", endDate = " + interval.endDate + "}");
+        }
+
+        assertThat(mergedList.size()).isEqualTo(3);
+        assertThat(mergedList.get(0)).isEqualTo(new Interval(LocalDate.of(2024, 1, 1), LocalDate.of(2024, 1, 5)));
+        assertThat(mergedList.get(1)).isEqualTo(new Interval(LocalDate.of(2024, 1, 7), LocalDate.of(2024, 1, 9)));
+        assertThat(mergedList.get(2)).isEqualTo(new Interval(LocalDate.of(2024, 1, 10), LocalDate.of(2024, 1, 15)));
+    }
+
+
+    @Test
+    void tempRegimeOverrideThatStartsOnBoundaryOfSkuAndSiteOverrideWithSucceedingSkuSiteOverridesWithSucceedingSkuSiteOverridesShouldAddOverride(){
+        List<Interval> A = new ArrayList<>();
+        A.add(new Interval(LocalDate.of(2024, 1, 1), LocalDate.of(2024, 1, 5)));
+        A.add(new Interval(LocalDate.of(2024, 1, 10), LocalDate.of(2024, 1, 15)));
+
+        List<Interval> B = new ArrayList<>();
+        B.add(new Interval(LocalDate.of(2024, 1, 5), LocalDate.of(2024, 1, 8)));
+
+        List<Interval> mergedList = OverlappingIntervals.mergeIntervals2(A, B);
+
+        for (Interval interval : mergedList) {
+            System.out.println("{startDate = " + interval.startDate + ", endDate = " + interval.endDate + "}");
+        }
+
+        assertThat(mergedList.size()).isEqualTo(3);
+        assertThat(mergedList.get(0)).isEqualTo(new Interval(LocalDate.of(2024, 1, 1), LocalDate.of(2024, 1, 5)));
+        assertThat(mergedList.get(1)).isEqualTo(new Interval(LocalDate.of(2024, 1, 6), LocalDate.of(2024, 1, 8)));
+        assertThat(mergedList.get(2)).isEqualTo(new Interval(LocalDate.of(2024, 1, 10), LocalDate.of(2024, 1, 15)));
+    }
+
+    @Test
+    void tempRegimeOverrideThatEndsOnBoundaryOfSkuSiteOverrideShouldAddOverride(){
+        List<Interval> A = new ArrayList<>();
+        A.add(new Interval(LocalDate.of(2024, 1, 1), LocalDate.of(2024, 1, 5)));
+        A.add(new Interval(LocalDate.of(2024, 1, 10), LocalDate.of(2024, 1, 15)));
+
+        List<Interval> B = new ArrayList<>();
+        B.add(new Interval(LocalDate.of(2024, 1, 7), LocalDate.of(2024, 1, 10)));
 
         List<Interval> mergedList = OverlappingIntervals.mergeIntervals2(A, B);
 

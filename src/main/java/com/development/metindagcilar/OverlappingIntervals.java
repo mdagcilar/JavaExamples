@@ -93,6 +93,11 @@ public class OverlappingIntervals {
                         i++;
                         m++;
                     }
+                } else if (A.size() > (m + 1) && b.endDate.isEqual(A.get((m + 1)).startDate)) {
+                    Interval newInterval = new Interval(b.startDate, b.endDate.minusDays(1));
+                    mergedList.add(newInterval);
+                    i++;
+                    m++;
                 } else {
                     Interval newInterval = new Interval(a.endDate.plusDays(1), b.endDate);
                     mergedList.add(newInterval);
