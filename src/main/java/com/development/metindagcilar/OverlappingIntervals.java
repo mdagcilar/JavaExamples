@@ -87,16 +87,8 @@ public class OverlappingIntervals {
                     i++;
                 }
             } else {
-//                mergedList.get(m).startDate = mergedList.get(m).startDate.isBefore(b.startDate) ? mergedList.get(m).startDate : b.startDate;
-//                mergedList.get(m).endDate = mergedList.get(m).endDate.isAfter(b.endDate) ? mergedList.get(m).endDate : b.endDate;
                 i++;
             }
-        }
-
-        // Add remaining intervals from list B to mergedList
-        while (i < B.size()) {
-            mergedList.add(B.get(i));
-            i++;
         }
 
         mergedList.sort(Comparator.comparing(a -> a.startDate));
