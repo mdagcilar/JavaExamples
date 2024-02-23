@@ -53,6 +53,25 @@ class OverlappingIntervalsTest {
     }
 
     @Test
+    void tempRegimeOverrideThatOverlapsFirstHalfOfSkuAndSiteOverrideTestShouldSplitFirstHalfOfTempRegimeOverride(){
+        List<Interval> A = new ArrayList<>();
+        A.add(new Interval(LocalDate.of(2024, 1, 5), LocalDate.of(2024, 1, 10)));
+
+        List<Interval> B = new ArrayList<>();
+        B.add(new Interval(LocalDate.of(2024, 1, 1), LocalDate.of(2024, 1, 8)));
+
+        List<Interval> mergedList = OverlappingIntervals.mergeIntervals2(A, B);
+
+        for (Interval interval : mergedList) {
+            System.out.println("{startDate = " + interval.startDate + ", endDate = " + interval.endDate + "}");
+        }
+
+        assertThat(mergedList.size()).isEqualTo(2);
+        assertThat(mergedList.get(0)).isEqualTo(new Interval(LocalDate.of(2024, 1, 1), LocalDate.of(2024, 1, 4)));
+        assertThat(mergedList.get(1)).isEqualTo(new Interval(LocalDate.of(2024, 1, 5), LocalDate.of(2024, 1, 10)));
+    }
+
+    @Test
     void tempRegimeOverrideWhichIsCompletelyCoveredBySkuSiteOverrideShouldBeIgnored(){
         List<Interval> A = new ArrayList<>();
         A.add(new Interval(LocalDate.of(2024, 1, 1), LocalDate.of(2024, 1, 15)));
