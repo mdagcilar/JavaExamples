@@ -69,21 +69,22 @@ public class OverlappingIntervals {
         int i = 0, m = 0;
 
         while (i < B.size()) {
+            Interval a = A.get(m);
             Interval b = B.get(i);
 
-            if (b.startDate.isBefore(mergedList.get(m).startDate)) {
-                LocalDate endDate = b.endDate.isBefore(mergedList.get(m).startDate) ? b.endDate : mergedList.get(m).startDate.minusDays(1);
+            if (b.startDate.isBefore(a.startDate)) {
+                LocalDate endDate = b.endDate.isBefore(a.startDate) ? b.endDate : a.startDate.minusDays(1);
                 Interval newInterval = new Interval(b.startDate, endDate);
                 mergedList.add(newInterval);
                 m++;
-            } else if (b.endDate.isAfter(mergedList.get(m).endDate)) {
-                if (mergedList.size() > (m + 1) && b.endDate.isAfter(mergedList.get(i + 1).startDate)) {
-                    Interval newInterval = new Interval(mergedList.get(m).endDate.plusDays(1), mergedList.get(i + 1).startDate.minusDays(1));
+            } else if (b.endDate.isAfter(a.endDate)) {
+                if (A.size() > (m + 1) && b.endDate.isAfter(A.get(i + 1).startDate)) {
+                    Interval newInterval = new Interval(A.get(m).endDate.plusDays(1), A.get(i + 1).startDate.minusDays(1));
                     mergedList.add(newInterval);
                     i++;
                     m++;
                 } else {
-                    Interval newInterval = new Interval(mergedList.get(m).endDate.plusDays(1), b.endDate);
+                    Interval newInterval = new Interval(a.endDate.plusDays(1), b.endDate);
                     mergedList.add(newInterval);
                     i++;
                     m++;
