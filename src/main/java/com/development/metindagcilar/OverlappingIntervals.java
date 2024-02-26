@@ -64,16 +64,10 @@ public class OverlappingIntervals {
         List<Interval> result = new ArrayList<>();
 
         for (Interval b : B) {
-            boolean overlapsWithA = false;
+            boolean skipB = false;
 
-            // Check against A intervals for overlap or inclusion
             for (Interval a : A) {
-                if (b.endDate.isBefore(a.startDate)) {
-                    // B is entirely before A and can be added directly
-                    result.add(new Interval(b.startDate, b.endDate));
-                    overlapsWithA = true;
-                    break; // Exit after adding B as it doesn't overlap with any A
-                } else if (b.overlaps(a)) {
+                if (b.overlaps(a)) {
                     // If B starts before A and overlaps, add the non-overlapping part
                     if (b.startDate.isBefore(a.startDate)) {
                         result.add(new Interval(b.startDate, a.startDate.minusDays(1)));
@@ -84,15 +78,14 @@ public class OverlappingIntervals {
                         b = new Interval(a.endDate.plusDays(1), b.endDate);
                     } else {
                         // B or remainder of B is completely within A
-                        overlapsWithA = true;
+                        skipB = true;
                         break;
                     }
                 }
-                // If B starts after A, check if there is another A to compare to
             }
 
             // If B does not overlap with any A, add it
-            if (!overlapsWithA) {
+            if (!skipB) {
                 result.add(new Interval(b.startDate, b.endDate));
             }
         }
@@ -116,7 +109,6 @@ class Interval {
         this.endDate = endDate;
     }
 
-    // Method to check if this interval overlaps with another interval
     public boolean overlaps(Interval other) {
         return !this.endDate.isBefore(other.startDate) && !this.startDate.isAfter(other.endDate);
     }
