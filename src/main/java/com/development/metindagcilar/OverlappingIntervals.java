@@ -63,61 +63,45 @@ public class OverlappingIntervals {
     public static List<Interval> mergeIntervals2(List<Interval> A, List<Interval> B) {
         List<Interval> result = new ArrayList<>();
 
-        // Process each interval in B
         for (Interval b : B) {
-            boolean isAdded = false;
+            boolean overlapsWithA = false;
 
-            for (int i = 0; i < A.size() && !isAdded; i++) {
-                Interval a = A.get(i);
-
-                // If b is entirely before a, add b and break
+            // Check against A intervals for overlap or inclusion
+            for (Interval a : A) {
                 if (b.endDate.isBefore(a.startDate)) {
+                    // B is entirely before A and can be added directly
                     result.add(new Interval(b.startDate, b.endDate));
-                    isAdded = true;
-                    break;
+                    overlapsWithA = true;
+                    break; // Exit after adding B as it doesn't overlap with any A
+                } else if (b.overlaps(a)) {
+                    // If B starts before A and overlaps, add the non-overlapping part
+                    if (b.startDate.isBefore(a.startDate)) {
+                        result.add(new Interval(b.startDate, a.startDate.minusDays(1)));
+                    }
+
+                    // If B ends after A, adjust B's end date to be compared to possibly another A
+                    if (b.endDate.isAfter(a.endDate)) {
+                        b = new Interval(a.endDate.plusDays(1), b.endDate);
+                    } else {
+                        // B or remainder of B is completely within A
+                        overlapsWithA = true;
+                        break;
+                    }
                 }
-
-                // If b starts before a and b ends within a, add the part before a and break
-                if (b.startDate.isBefore(a.startDate) && b.endDate.isBefore(a.endDate)) {
-                    result.add(new Interval(b.startDate, a.startDate.minusDays(1)));
-                    isAdded = true;
-                    break;
-                }
-
-                // If b starts before a and b ends after start of a, split b into the part before a and push b start after a
-                if (b.startDate.isBefore(a.startDate) && b.endDate.isAfter(a.startDate)) {
-                    result.add(new Interval(b.startDate, a.startDate.minusDays(1)));
-
-                    b.startDate = a.endDate.plusDays(1); // Adjust b to start after a
-                }
-
-                // If b is completely within a, skip b
-                if (b.isWithin(a)) {
-                    isAdded = true;
-                    break;
-                }
-
-                // If b starts within a and ends after a, adjust b to start after a
-                if (!b.startDate.isBefore(a.startDate) && b.endDate.isAfter(a.endDate)) {
-                    LocalDate max = b.startDate.isAfter(a.endDate) ? b.startDate : a.endDate.plusDays(1);
-                    b.startDate = max;
-                }
-
-                // If b starts after a, check against the next interval in A
+                // If B starts after A, check if there is another A to compare to
             }
 
-            // If b was not added and is not overlapping or within any A intervals, add it
-            if (!isAdded) {
+            // If B does not overlap with any A, add it
+            if (!overlapsWithA) {
                 result.add(new Interval(b.startDate, b.endDate));
             }
         }
 
-        // Add all A intervals to result
+        // Add all A intervals to result, we can assume these are non-overlapping from the API validation
         result.addAll(A);
 
-        // Sort the result based on the start date
+        //sort for ease of test assertions
         result.sort(Comparator.comparing(interval -> interval.startDate));
-
         return result;
     }
 }
@@ -137,17 +121,4 @@ class Interval {
         return !this.endDate.isBefore(other.startDate) && !this.startDate.isAfter(other.endDate);
     }
 
-    // Checks if this interval is completely within another interval
-    public boolean isWithin(Interval other) {
-        return !this.startDate.isBefore(other.startDate) && !this.endDate.isAfter(other.endDate);
-    }
-
-    // Getters and setters
-    public LocalDate getStartDate() {
-        return startDate;
-    }
-
-    public LocalDate getEndDate() {
-        return endDate;
-    }
 }
