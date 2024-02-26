@@ -9,64 +9,20 @@ import java.util.List;
 
 public class OverlappingIntervals {
 
-//    public static List<Interval> mergeIntervals(List<Interval> A, List<Interval> B) {
-//        // Sort both lists based on the start date
-//        A.sort(Comparator.comparing(a -> a.startDate));
-//        B.sort(Comparator.comparing(a -> a.startDate));
-//
-//        List<Interval> mergedList = new ArrayList<>();
-//        int i = 0, j = 0;
-//
-//        while (i < A.size() && j < B.size()) {
-//            Interval a = A.get(i);
-//            Interval b = B.get(j);
-//
-//            // could probs get away with adding all of A immediately?
-//
-//            // Check if intervals overlap
-//            if (!a.startDate.isAfter(b.endDate) && !b.startDate.isAfter(a.endDate)) {
-//                // Add interval from list A to mergedList
-//                mergedList.add(a);
-//
-//                // Create a new interval to cover the gap in list B
-//                if (a.endDate.isBefore(b.endDate) && hasSucceedingInterval(A, i) && b.endDate.isAfter(A.get(i + 1).startDate)) {
-//                    Interval newInterval = new Interval(a.endDate.plusDays(1), A.get(i + 1).startDate.minusDays(1));
-//                    mergedList.add(newInterval);
-//                } else {
-//                    mergedList.add(new Interval(a.endDate.plusDays(1), b.endDate));
-//                }
-//
-//                i++;
-//                j++;
-//            } else {
-//                // Add interval from list A to mergedList
-//                mergedList.add(a);
-//                i++;
-//            }
-//        }
-//
-////        // Add remaining intervals from list B to mergedList
-////        while (j < B.size()) {
-////            mergedList.add(B.get(j));
-////            j++;
-////        }
-////
-//        // Add remaining intervals from list A to mergedList
-//        while (i < A.size()) {
-//            mergedList.add(A.get(i));
-//            i++;
-//        }
-//
-//        return mergedList;
-//    }
-
-    public static List<Interval> mergeIntervals2(List<Interval> A, List<Interval> B) {
-        List<Interval> result = new ArrayList<>();
+    public static List<Interval> mergeIntervals(List<Interval> A, List<Interval> B) {
+        // start our result list with all of A, since they should not overlap (based on API validation we can assume this)
+        List<Interval> result = new ArrayList<>(A);
 
         for (Interval b : B) {
-            boolean skipB = false;
+            boolean isBAdded = false;
 
             for (Interval a : A) {
+                // if B is before A, then break early and add B
+                if (b.endDate.isBefore(a.startDate)) {
+                    result.add(new Interval(b.startDate, b.endDate));
+                    isBAdded = true;
+                    break;
+                }
                 if (b.overlaps(a)) {
                     // If B starts before A and overlaps, add the non-overlapping part
                     if (b.startDate.isBefore(a.startDate)) {
@@ -78,20 +34,17 @@ public class OverlappingIntervals {
                         b = new Interval(a.endDate.plusDays(1), b.endDate);
                     } else {
                         // B or remainder of B is completely within A
-                        skipB = true;
+                        isBAdded = true;
                         break;
                     }
                 }
             }
 
             // If B does not overlap with any A, add it
-            if (!skipB) {
+            if (!isBAdded) {
                 result.add(new Interval(b.startDate, b.endDate));
             }
         }
-
-        // Add all A intervals to result, we can assume these are non-overlapping from the API validation
-        result.addAll(A);
 
         //sort for ease of test assertions
         result.sort(Comparator.comparing(interval -> interval.startDate));
