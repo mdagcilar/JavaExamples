@@ -77,24 +77,30 @@ public class OverlappingIntervals {
                     break;
                 }
 
-                // If b starts before a and b ends after start of a, split b into the part before a
+                // If b starts before a and b ends within a, add the part before a and break
+                if (b.startDate.isBefore(a.startDate) && b.endDate.isBefore(a.endDate)) {
+                    result.add(new Interval(b.startDate, a.startDate.minusDays(1)));
+                    isAdded = true;
+                    break;
+                }
+
+                // If b starts before a and b ends after start of a, split b into the part before a and push b start after a
                 if (b.startDate.isBefore(a.startDate) && b.endDate.isAfter(a.startDate)) {
                     result.add(new Interval(b.startDate, a.startDate.minusDays(1)));
-                    if (b.endDate.isBefore(a.endDate)) {
-                        isAdded = true;
-                    }
+
                     b.startDate = a.endDate.plusDays(1); // Adjust b to start after a
                 }
 
                 // If b is completely within a, skip b
                 if (b.isWithin(a)) {
-                    isAdded = true; // b is skipped
+                    isAdded = true;
                     break;
                 }
 
                 // If b starts within a and ends after a, adjust b to start after a
                 if (!b.startDate.isBefore(a.startDate) && b.endDate.isAfter(a.endDate)) {
-                    b.startDate = a.endDate.plusDays(1);
+                    LocalDate max = b.startDate.isAfter(a.endDate) ? b.startDate : a.endDate.plusDays(1);
+                    b.startDate = max;
                 }
 
                 // If b starts after a, check against the next interval in A
