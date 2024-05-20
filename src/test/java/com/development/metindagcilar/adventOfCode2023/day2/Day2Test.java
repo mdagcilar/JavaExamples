@@ -28,7 +28,7 @@ class Day2Test {
     @Test
     void testSampleTwoInput() {
         Day2 cubes = new Day2();
-        int sumOfCalibrationValues = cubes.sumOfGameIds(readPuzzleInput.getSampleTwoAsLines());
+        int sumOfCalibrationValues = cubes.powerOfGameIds(readPuzzleInput.getSampleTwoAsLines());
 
         assertThat(sumOfCalibrationValues).isEqualTo(2286);
     }
@@ -36,9 +36,9 @@ class Day2Test {
     @Test
     void testPartTwoInput() {
         Day2 cubes = new Day2();
-        int sumOfCalibrationValues = cubes.sumOfGameIds(readPuzzleInput.getInputOneAsLines());
+        int sumOfCalibrationValues = cubes.powerOfGameIds(readPuzzleInput.getInputOneAsLines());
 
-        assertThat(sumOfCalibrationValues).isEqualTo(55652);
+        assertThat(sumOfCalibrationValues).isEqualTo(69629);
     }
 
 }

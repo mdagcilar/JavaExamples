@@ -22,4 +22,11 @@ public record SubGame(
                 .build();
     }
 
+    public int maxFrequencyOfColor(Color color) {
+        return this.cubes().stream()
+                .filter(cube -> cube.color().equals(color))
+                .mapToInt(Cube::frequency)
+                .max()
+                .orElse(0);
+    }
 }

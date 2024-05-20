@@ -13,6 +13,29 @@ public class Day2 {
         return sumGameIds(games);
     }
 
+    public int powerOfGameIds(List<String> sampleAsLines) {
+        List<Game> games = sampleAsLines.stream()
+                .map(this::extractGames)
+                .toList();
+
+        return games.stream()
+                .map(Game::minCubesForGame)
+                .mapToInt(MinCubeSet::power)
+                .sum();
+    }
+
+    public int powerOfGameIdsOption2(List<String> sampleAsLines) {
+        List<Game> games = sampleAsLines.stream()
+                .map(this::extractGames)
+                .toList();
+
+        int totalPower = games.stream()
+                .mapToInt(Game::powerOfGame)
+                .sum();
+
+        return totalPower;
+    }
+
     private Game extractGames(String rawGameInput) {
         String subGameDelimiter = ";";
         String[] gameInputs1 = rawGameInput.split(":");
@@ -26,11 +49,17 @@ public class Day2 {
     }
 
     private boolean isValidGame(Game game) {
-        return game.subGames().stream().allMatch(this::isValidSubGame);
+        return game
+                .subGames()
+                .stream()
+                .allMatch(this::isValidSubGame);
     }
 
     private boolean isValidSubGame(SubGame subGame) {
-        return subGame.cubes().stream().allMatch(Cube::isCubeValid);
+        return subGame
+                .cubes()
+                .stream()
+                .allMatch(Cube::isCubeValid);
     }
 
     private Integer sumGameIds(List<Game> validGames) {
