@@ -5,7 +5,7 @@ import java.util.HashMap;
 public class Cache {
 
     private int maxCacheSize;
-    private HashMap<Integer, LinkedListNode> map = new HashMap<Integer, LinkedListNode>();
+    private HashMap<Integer, LinkedListNode> map = new HashMap<>();
     private LinkedListNode listHead = null;
 
     public LinkedListNode listTail = null;
